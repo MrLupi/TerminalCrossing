@@ -7,7 +7,7 @@ else
 	CFLAGS += -O2 -s -DNDEBUG
 endif 
 LFLAGS = 
-OBJS = main.o renderer.o
+OBJS = main.o renderer.o mem.o
 
 all: $(PROGNAME)
 
@@ -22,6 +22,9 @@ main.o:   main.c
 
 renderer.o:   renderer.c
 	$(CC) $(CFLAGS) -c renderer.c
+
+mem.o:   mem.c
+	$(CC) $(CFLAGS) -c mem.c
 
 clean:
 		rm -f $(OBJS) $(PROGNAME)

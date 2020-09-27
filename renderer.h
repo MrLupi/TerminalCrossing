@@ -1,7 +1,7 @@
 #ifndef TC_RENDERER_INLCUDED 
 #define TC_RENDERER_INLCUDED 
 #include <termios.h>
-
+#include <inttypes.h>
 
 //static int _tcRendererWidth;
 //static int _tcRendererHeight;
@@ -47,20 +47,47 @@
 #define CNRM 0
 
 
-struct __renderer
+struct __tc_renderer
 {
     
 };
 
-typedef struct __renderer TCRenderer_t;
+typedef struct __tc_renderer tcRenderer_t;
+
+
+struct __tc_canvas_item
+{
+    uint8_t color;
+    uint8_t backGroundColor;
+    uint8_t updated;
+    char content;   
+};
+
+typedef struct __tc_canvas_item tcCanvasItem_t;
+
+
+struct __tc_canvas
+{
+    int width;
+    int height;
+    tcCanvasItem_t *content;
+};
+
+typedef struct __tc_canvas tcCanvas_t;
+
+
+tcCanvas_t *createTcCanvas( int width, int height );
+void destroyTcCanvas( tcCanvas_t **canvas );
+void tcRendererDrawCanvas( tcCanvas_t *canvas );
+
 
 int  tcRendererGetKey();
 void tcRendererClearScreen();
 void tcRendererTextColor(int c);
 void tcRendererGotoyx(int y, int x);
 void tcRendererGotoyxc(int y, int x,int c);
-int tcRendererInit( TCRenderer_t *renderer );
-int tcRendererDraw( TCRenderer_t *renderer );
+int tcRendererInit( tcRenderer_t *renderer );
+int tcRendererDraw( tcRenderer_t *renderer );
 
 
 

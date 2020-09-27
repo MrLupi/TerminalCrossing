@@ -8,6 +8,55 @@
 #include <inttypes.h>
 
 #include "renderer.h"
+#include "mem.h"
+
+
+
+tcCanvas_t *createTcCanvas( int width, int height )
+{
+    tcCanvas_t *canvas;
+    
+    size_t canvasSize = sizeof( tcCanvas_t );    
+    size_t numberOfCanvasItems = width * height * sizeof( tcCanvasItem_t );
+    
+    canvas = ( tcCanvas_t * ) balloc( canvasSize );
+    canvas->content = ( tcCanvasItem_t* ) balloc( numberOfCanvasItems );
+    
+    canvas->width = width;
+    canvas->height = height;
+    
+    return canvas;
+}
+
+void destroyTcCanvas( tcCanvas_t **canvas )
+{
+    free( ( *canvas )->content );
+    free( ( *canvas ) );
+    *canvas = NULL;
+}
+
+void tcRendererDrawCanvas( tcCanvas_t *canvas )
+{
+    int x;
+    int y;
+    int i = 0;
+    
+    for ( y = 1; y < canvas->height; y++ )
+    {
+        for ( x = 1; x < canvas->width; x++ )
+        {            
+            if ( canvas->content[i].updated )
+            {
+                tcRendererTextColor( canvas->content[i].color );
+                tcRendererTextColor( canvas->content[i].backGroundColor );
+                tcRendererGotoyx( y, x );
+                putchar( canvas->content[i].content );
+                canvas->content[i].updated = 0;
+            }
+            i++;
+        }
+    }
+}
 
 int tcRendererGetKey() 
 {

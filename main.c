@@ -7,17 +7,31 @@
 char *progname;
 
 
+void setTestVal( tcCanvasItem_t *item )
+{
+    item->color = 4;
+    item->backGroundColor = 12;
+    item->content = '9';
+    item->updated = 1;
+}
+
+
 int main( int argc, char** argv )
 {
     progname = argv[0];
+        
+    tcCanvas_t *canvas;
     
-    int i = 0;
+    canvas = createTcCanvas( 20, 20 );
     
-    for ( i = 0; i <=8; i++ )
+    for ( int i = 12; i < 64; i++ )
     {
-        tcRendererGotoyxc( i, 1, i);
-        printf("Hello, World");
+        setTestVal( canvas->content + i );
     }
+      
+    tcRendererDrawCanvas( canvas );
     
     return EXIT_SUCCESS;
 }
+
+
