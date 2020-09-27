@@ -1,2 +1,3 @@
 # TerminalCrossing
-Text mode crossing game
+
+A text mode game inspired by the original console game. 
