@@ -35,6 +35,21 @@ void destroyTcCanvas( tcCanvas_t **canvas )
     *canvas = NULL;
 }
 
+static int tcRendererIsEqualCanvasItem( tcCanvasItem_t* item1, tcCanvasItem_t* item2 )
+{
+    return item1->backGroundColor == item2->backGroundColor && item1->color == item2->color && item1->content == item2->content;
+}
+
+static void tcRendererAssignCanvasItem( tcCanvasItem_t* source, tcCanvasItem_t* target )
+{
+   target->backGroundColor = source->backGroundColor;
+   target->color = source->color;
+   target->content = source->content;
+   target->updated = 1;
+}
+
+
+
 void tcRendererDrawCanvas( tcCanvas_t *canvas )
 {
     int x;
@@ -53,6 +68,26 @@ void tcRendererDrawCanvas( tcCanvas_t *canvas )
                 putchar( canvas->content[i].content );
                 canvas->content[i].updated = 0;
             }
+            i++;
+        }
+    }
+}
+
+void tcRendererSetUpdateCanvas( tcCanvas_t *canvas, tcCanvas_t *newCanvas)
+{
+    int x;
+    int y;
+    int i = 0;
+    
+    for ( y = 1; y < canvas->height; y++ )
+    {
+        for ( x = 1; x < canvas->width; x++ )
+        {            
+            if ( !tcRendererIsEqualCanvasItem( canvas->content + i, newCanvas->content + i ) )
+            {                
+                tcRendererAssignCanvasItem( newCanvas->content + i, canvas->content + i );
+            }
+                
             i++;
         }
     }
