@@ -6,34 +6,16 @@
 #include <unistd.h>
 #include <assert.h>
 #include <inttypes.h>
+#include <sys/ioctl.h>
 
 #include "renderer.h"
+#include "canvas.h"
 #include "mem.h"
 
 
+static tcCanvas_t *_lastCanvas;
+static struct winsize _lastTerminalSize;
 
-tcCanvas_t *createTcCanvas( int width, int height )
-{
-    tcCanvas_t *canvas;
-    
-    size_t canvasSize = sizeof( tcCanvas_t );    
-    size_t numberOfCanvasItems = width * height * sizeof( tcCanvasItem_t );
-    
-    canvas = ( tcCanvas_t * ) balloc( canvasSize );
-    canvas->content = ( tcCanvasItem_t* ) balloc( numberOfCanvasItems );
-    
-    canvas->width = width;
-    canvas->height = height;
-    
-    return canvas;
-}
-
-void destroyTcCanvas( tcCanvas_t **canvas )
-{
-    free( ( *canvas )->content );
-    free( ( *canvas ) );
-    *canvas = NULL;
-}
 
 static int tcRendererIsEqualCanvasItem( tcCanvasItem_t* item1, tcCanvasItem_t* item2 )
 {
@@ -48,9 +30,35 @@ static void tcRendererAssignCanvasItem( tcCanvasItem_t* source, tcCanvasItem_t* 
    target->updated = 1;
 }
 
+static struct winsize tcRendererGetTerminalSize()
+{
+    struct winsize terminalSize;
+    ioctl(0, TIOCGWINSZ, &terminalSize);
+    return terminalSize;
+}
 
+static int tcRendererAreEqualWinSize( struct winsize lhs, struct winsize rhs )
+{
+    if ( lhs.ws_col != rhs.ws_col || lhs.ws_row != rhs.ws_row )
+    {
+        return 0;
+    }
 
-void tcRendererDrawCanvas( tcCanvas_t *canvas )
+    return 1;    
+}
+
+static int tcRendererTerminalSizeHasChanged()
+{
+    struct winsize currentTerminalSize = tcRendererGetTerminalSize();    
+    return tcRendererAreEqualWinSize( currentTerminalSize, _lastTerminalSize );
+}
+
+static void tcRendererUpdateLastTerminalSize( struct winsize terminalSize )
+{
+    _lastTerminalSize = terminalSize;
+}
+
+static void tcRendererDrawCanvas( tcCanvas_t *canvas )
 {
     int x;
     int y;
@@ -73,7 +81,8 @@ void tcRendererDrawCanvas( tcCanvas_t *canvas )
     }
 }
 
-void tcRendererSetUpdateCanvas( tcCanvas_t *canvas, tcCanvas_t *newCanvas)
+
+static void tcRendererSetUpdateCanvas( tcCanvas_t *canvas, tcCanvas_t *newCanvas)
 {
     int x;
     int y;
@@ -92,6 +101,34 @@ void tcRendererSetUpdateCanvas( tcCanvas_t *canvas, tcCanvas_t *newCanvas)
         }
     }
 }
+
+void tcRendererRenderCanvas( tcCanvas_t *canvas )
+{
+    if ( tcRendererTerminalSizeHasChanged() )
+    {
+        struct winsize terminalSize = tcRendererGetTerminalSize();
+        tcRendererUpdateLastTerminalSize( terminalSize );
+        tcSetCanvasSize( canvas, terminalSize );
+        tcSetCanvasSize( _lastCanvas, terminalSize );
+    }
+
+    tcRendererSetUpdateCanvas( _lastCanvas, canvas );
+    tcRendererDrawCanvas( _lastCanvas );    
+}
+
+void tcRendererInit()
+{
+    tcRendererUpdateLastTerminalSize( tcRendererGetTerminalSize() );
+    _lastCanvas = tcCreateTcCanvas( _lastTerminalSize.ws_col, _lastTerminalSize.ws_row );    
+}
+
+tcCanvas_t *tcRendererCreateCanvas()
+{
+    struct winsize terminalSize = tcRendererGetTerminalSize();
+    tcCanvas_t *newCanvas = tcCreateTcCanvas( terminalSize.ws_col, terminalSize.ws_row );
+    return newCanvas;
+}
+
 
 int tcRendererGetKey() 
 {

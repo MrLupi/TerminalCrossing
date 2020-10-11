@@ -18,6 +18,9 @@ static tcKnownPtr_t *listOfKnownPointers;
 
 void *balloc( size_t length );
 
+int smallestInt( int i1, int i2 );
+
+
 
 
 #endif // TC_MEM_INCLUDED

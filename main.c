@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "renderer.h"
-
+#include "canvas.h"
 
 char *progname;
 
@@ -20,16 +20,9 @@ int main( int argc, char** argv )
 {
     progname = argv[0];
         
-    tcCanvas_t *canvas;
-    
-    canvas = createTcCanvas( 20, 20 );
-    
-    for ( int i = 12; i < 64; i++ )
-    {
-        setTestVal( canvas->content + i );
-    }
-      
-    tcRendererDrawCanvas( canvas );
+    tcRendererInit();
+    tcCanvas_t *canvas = tcRendererCreateCanvas();
+    tcRendererRenderCanvas( canvas );
     
     return EXIT_SUCCESS;
 }

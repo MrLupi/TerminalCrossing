@@ -7,7 +7,7 @@ else
 	CFLAGS += -O2 -s -DNDEBUG
 endif 
 LFLAGS = 
-OBJS = main.o renderer.o mem.o
+OBJS = main.o renderer.o mem.o canvas.o
 
 all: $(PROGNAME)
 
@@ -25,6 +25,9 @@ renderer.o:   renderer.c
 
 mem.o:   mem.c
 	$(CC) $(CFLAGS) -c mem.c
+
+canvas.o:   canvas.c
+	$(CC) $(CFLAGS) -c canvas.c
 
 clean:
 		rm -f $(OBJS) $(PROGNAME)
