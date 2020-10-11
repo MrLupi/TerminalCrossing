@@ -46,6 +46,7 @@
 #define BCNRM 10
 #define CNRM 0
 
+#define TC_RENDERER_MAXIMUMFRAMERATE 10
 
 struct __tc_renderer
 {
@@ -79,6 +80,7 @@ typedef struct __tc_canvas tcCanvas_t;
 tcCanvas_t *createTcCanvas( int width, int height );
 void destroyTcCanvas( tcCanvas_t **canvas );
 void tcRendererDrawCanvas( tcCanvas_t *canvas );
+void tcRendererSetUpdateCanvas( tcCanvas_t *canvas, tcCanvas_t *newCanvas);
 
 
 int  tcRendererGetKey();
