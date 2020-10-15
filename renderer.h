@@ -4,6 +4,7 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include "canvas.h"
+#include "tcPublicColors.h"
 
 //static int _tcRendererWidth;
 //static int _tcRendererHeight;
@@ -30,23 +31,6 @@
 #define GWHT  "\x1B[37m"
 #define CLEAR "\x1B[3;J\x1B[H\x1B[2J"
 
-#define CBLU 1
-#define CGRN 2
-#define CCYN 3
-#define CRED 4
-#define CMAG 5
-#define CYEL 6
-#define CWHT 7
-#define CBLK 8
-#define BCBLU 11
-#define BCGRN 12
-#define BCCYN 13
-#define BCRED 14
-#define BCMAG 15
-#define BCYEL 16
-#define BCWHT 17
-#define BCNRM 10
-#define CNRM 0
 
 #define TC_RENDERER_MAXIMUMFRAMERATE 10
 
