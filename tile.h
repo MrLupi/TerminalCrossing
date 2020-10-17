@@ -2,6 +2,10 @@
 #define TC_TILE_H_INCLUDE
 #include <inttypes.h>
 
+const char* water1 = { '~' ,CWHT, CBLU };
+const char* water2 = { ' ' ,CWHT, CBLU };
+const char* land1 = { '.', CWHT, CYEL };
+
 typedef struct __tc_tile_square
 {
     uint8_t character;
@@ -13,7 +17,7 @@ typedef struct __tc_tile_square
 tcTileSquare_t *tcCreateTileSquare();
 void tcDestroyTileSquare( tcTileSquare_t **square );
 void tcSetTileSquare( tcTileSquare_t *square, uint8_t character, uint8_t color, uint8_t backgroundColor );
-void tcSetTileSquareStr( tcTileSquare_t *square, const char *string );
+tcTileSquare_t *tcSetTileSquareStr( const char *string );
 void tcSetOptionsTileSquare( tcTileSquare_t *square, uint8_t options );
 
 
@@ -66,4 +70,5 @@ void tcTileStoreAddTileSquare( tcTileStore_t *store, tcTileSquare_t *square );
 void tcTileStoreAddTile( tcTileStore_t *store, tcTile_t *tile );
 void tcDestroyTileStore( tcTileStore_t **store );
 
+tcTileStore_t *initializeTileStore();
 #endif // TC_TILE_H_INCLUDE

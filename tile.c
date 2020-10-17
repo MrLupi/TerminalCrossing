@@ -1,4 +1,6 @@
 #include <stdlib.h>
+
+#include "tcPublicColors.h"
 #include "mem.h"
 #include "tile.h"
 
@@ -32,8 +34,11 @@ void tcSetTileSquare( tcTileSquare_t *square, uint8_t character, uint8_t color, 
     square->backgroundColor = backgroundColor;
 }
 
-void tcSetTileSquareStr( tcTileSquare_t *square, const char *string )
+tcTileSquare_t *tcSetTileSquareStr( const char *string )
 {
+    tcTileSquare_t *square;
+    square = tcCreateTileSquare();
+
     square->character = string[0];
     square->color = string[1];
     square->backgroundColor = string[2];
@@ -186,9 +191,47 @@ void tcTileStoreAddUsableTile( tcTileStore_t *store, tcUsableTile_t *usableTile 
     store->usableTiles[store->numberOfUsableTiles++] = usableTile;
 }
 
-
 void tcDestroyTileStore( tcTileStore_t **store )
 {
     free( *store );
     *store = NULL;
+}
+
+tcTileStore_t *initializeTileStore()
+{    
+    tcTileStore_t *store = tcCreateTileStore();
+
+    tcTileSquare_t *water1square = tcSetTileSquareStr( water1 );
+    tcTileSquare_t *water2square = tcSetTileSquareStr( water2 );
+    tcTileSquare_t *land1square = tcSetTileSquareStr( land1 );
+
+    tcTileStoreAddTileSquare( store, water1square );
+    tcTileStoreAddTileSquare( store, water2square );
+    tcTileStoreAddTileSquare( store, land1square );
+    
+    tcTile_t *waterTile = tcCreateTile();
+    tcAddTileSquareToTile( waterTile, water1square );
+    tcAddTileSquareToTile( waterTile, water2square );
+    tcAddTileSquareToTile( waterTile, water2square );
+    tcAddTileSquareToTile( waterTile, water1square );
+
+    tcTileStoreAddTile( store, waterTile );
+
+    tcUsableTile_t *usableWaterTile = tcCreateUsableTile();
+    tcAddTileToUsableTile( usableWaterTile, waterTile );
+
+    tcTileStoreAddUsableTile( store, usableWaterTile );
+
+    tcTile_t *landTile = tcCreateTile();
+    tcAddTileSquareToTile( landTile, land1square );
+    tcAddTileSquareToTile( landTile, land1square );
+    tcAddTileSquareToTile( landTile, land1square );
+    tcAddTileSquareToTile( landTile, land1square );
+
+    tcTileStoreAddTile( store, landTile );
+
+    tcUsableTile_t *usableLandTile = tcCreateUsableTile();
+    tcAddTileToUsableTile( usableLandTile, landTile );
+
+    tcTileStoreAddUsableTile( store, landTile );
 }
