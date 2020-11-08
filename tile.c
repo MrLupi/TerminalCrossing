@@ -42,6 +42,8 @@ tcTileSquare_t *tcSetTileSquareStr( const char *string )
     square->character = string[0];
     square->color = string[1];
     square->backgroundColor = string[2];
+
+    return square;
 }
 
 void tcSetOptionsTileSquare( tcTileSquare_t *square, uint8_t options )
@@ -117,7 +119,7 @@ void tcSetOptionUsableTile( tcUsableTile_t *tile, uint8_t options )
     tile->options |= options;
 }
 
-void tcSetOptionUsableTile( tcUsableTile_t *tile, uint8_t options )
+void tcResetOptionUsableTile( tcUsableTile_t *tile, uint8_t options )
 {
     tile->options &= ~options;
 }
@@ -197,8 +199,12 @@ void tcDestroyTileStore( tcTileStore_t **store )
     *store = NULL;
 }
 
-tcTileStore_t *initializeTileStore()
+tcTileStore_t *tcInitializeTileStore()
 {    
+    const char water1[] = { '~' ,CWHT, CBLU };
+    const char water2[] = { ' ' ,CWHT, CBLU };
+    const char land1[] = { '.', CWHT, CYEL };
+
     tcTileStore_t *store = tcCreateTileStore();
 
     tcTileSquare_t *water1square = tcSetTileSquareStr( water1 );
@@ -233,5 +239,7 @@ tcTileStore_t *initializeTileStore()
     tcUsableTile_t *usableLandTile = tcCreateUsableTile();
     tcAddTileToUsableTile( usableLandTile, landTile );
 
-    tcTileStoreAddUsableTile( store, landTile );
+    tcTileStoreAddUsableTile( store, usableLandTile );
+
+    return store;
 }

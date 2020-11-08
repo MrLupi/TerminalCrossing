@@ -32,10 +32,10 @@ tcDrawableTile_t *tcMapcreateDrawableTile( uint8_t *data, uint32_t count )
 
     for (int i = 0; i < tileCount; i++ )
     {
-        tcDrawableTileContent_t content = newDrawableTile->contents[i];
-        content.backgroundColor = data[i + 0];
-        content.color = data[i + 1];
-        content.character = (char) data[i + 2];
+        tcDrawableTileContent_t *content = newDrawableTile->contents+i;
+        content->backgroundColor = data[i + 0];
+        content->color = data[i + 1];
+        content->character = (char) data[i + 2];
     }
 
     return newDrawableTile;
@@ -57,6 +57,7 @@ tcDrawableTile_t **tcMapLoadDrawableTilesList()
     drawableTilesList = (tcDrawableTile_t **) balloc( sizeof( tcDrawableTile_t * ) *numberOfTiles );
     //drawableTilesList[0] = tcMapcreateDrawableTile( {BCBLU, CWHT, '~' }, 1 )
 
+    return drawableTilesList;
 }
 
 void tcMapDestroyDrawableTilesList( tcDrawableTile_t ***drawableTilesList )
