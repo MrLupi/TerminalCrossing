@@ -13,7 +13,7 @@ typedef struct __tc_game_data
     tcTileStore_t *store;
 } tcGameData_t;
 
-void tcGameSetup( tcGameData_t gameData );
+void tcGameSetup( tcGameData_t *gameData );
 void tcGameLoop( tcGameData_t gameData );
 void tcGameClean( tcGameData_t gameData );
 void getUserInput();

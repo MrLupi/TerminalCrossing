@@ -66,6 +66,7 @@ void tcAddTileSquareToTile( tcTile_t *tile, tcTileSquare_t *square )
         if ( tile->squares[pos] == NULL )
         {
             tile->squares[pos] = square;
+            break;
         }
     }
 }
@@ -218,8 +219,8 @@ tcTileStore_t *tcInitializeTileStore()
     tcTile_t *waterTile = tcCreateTile();
     tcAddTileSquareToTile( waterTile, water1square );
     tcAddTileSquareToTile( waterTile, water2square );
-    tcAddTileSquareToTile( waterTile, water2square );
     tcAddTileSquareToTile( waterTile, water1square );
+    tcAddTileSquareToTile( waterTile, water2square );
 
     tcTileStoreAddTile( store, waterTile );
 

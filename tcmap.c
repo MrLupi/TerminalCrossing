@@ -80,7 +80,7 @@ void tcMapDestroyMapTile( tcMapTile_t **tile )
     *tile = NULL;
 }
 
-static void tcMapSetWaterMap( tcMap_t *map )
+/*static*/ void tcMapSetWaterMap( tcMap_t *map )
 {
     int i;
     tcMapTile_t *tiles;
@@ -90,6 +90,19 @@ static void tcMapSetWaterMap( tcMap_t *map )
     for ( i = 0; i < map->count; i++ )
     {
         tiles[i].base_content = TC_MAP_BASE_CONTENT_SEA;
+    }
+}
+
+/*static*/ void tcMapSetLandMap( tcMap_t *map )
+{
+    int i;
+    tcMapTile_t *tiles;
+
+    tiles = map->tiles;
+
+    for ( i = 0; i < map->count; i++ )
+    {
+        tiles[i].base_content = TC_MAP_BASE_CONTENT_LAND;
     }
 }
 
@@ -110,7 +123,7 @@ tcMap_t *tcMapCreateMap()
 
 void tcMapToCanvas( tcMap_t *map, tcCanvas_t *canvas )
 {
-
+    
 }
 
 void tcMapDestroyMap( tcMap_t **map )

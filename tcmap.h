@@ -13,9 +13,9 @@
 enum base_map
 {
     TC_MAP_BASE_CONTENT_SEA = 1,
+    TC_MAP_BASE_CONTENT_LAND,
     TC_MAP_BASE_CONTENT_RIVER,
     TC_MAP_BASE_CONTENT_BEACH,
-    TC_MAP_BASE_CONTENT_LAND
 };
 
 struct __tc_drawable_tile_content
@@ -60,7 +60,8 @@ typedef struct __tc_map tcMap_t;
 tcMap_t *tcMapCreateMap();
 void tcMapToCanvas( tcMap_t *map, tcCanvas_t *canvas );
 void tcMapDestroyMap( tcMap_t **map );
-
+void tcMapSetWaterMap( tcMap_t *map );
+void tcMapSetLandMap( tcMap_t *map );
 
 
 
