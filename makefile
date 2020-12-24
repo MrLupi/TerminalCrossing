@@ -12,6 +12,7 @@ OBJS = main.o renderer.o mem.o canvas.o tcmap.o tile.o
 all: $(PROGNAME)
 
 debug:
+	make clean
 	make "BUILD=debug"
 
 $(PROGNAME):	$(OBJS)

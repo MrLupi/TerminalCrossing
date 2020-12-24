@@ -64,19 +64,20 @@ static void tcRendererDrawCanvas( tcCanvas_t *canvas )
     int y;
     int i = 0;
     
-    for ( y = 1; y < canvas->height; y++ )
+    for ( y = 1; y < canvas->height - 1; y++ )
     {
-        for ( x = 1; x < canvas->width; x++ )
+        for ( x = 1; x < canvas->width - 1; x++ )
         {            
+            i = x + y * canvas->width;
             if ( canvas->content[i].updated )
             {
                 tcRendererTextColor( canvas->content[i].color );
-                tcRendererTextColor( canvas->content[i].backGroundColor );
+                tcRendererTextColor( canvas->content[i].backGroundColor + 10);
                 tcRendererGotoyx( y, x );
                 putchar( canvas->content[i].content );
                 canvas->content[i].updated = 0;
             }
-            i++;
+            
         }
     }
 }
@@ -178,6 +179,7 @@ void tcRendererTextColor( int colour )
     case 15: printf( BGMAG ); break;
     case 16: printf( BGYEL ); break;
     case 17: printf( BGWHT ); break;
+    case 18: printf( BGNRM ); break;
 
     default: 
              printf( GNRM );

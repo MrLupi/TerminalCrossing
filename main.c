@@ -67,21 +67,19 @@ void handleGameLogic( tcGameData_t gameData )
 {
     static int flick = 0;
 
-    flick ++;
 
-    if ( flick < 5000 )
+
+    if ( flick == 0 )
     {
         tcMapSetLandMap( gameData.map );
+        flick = 1;
     }
     else
     {
         tcMapSetWaterMap( gameData.map );
-    }
-
-    if ( flick > 10000 )
-    {
         flick = 0;
     }
+
     
 }
 
@@ -115,12 +113,32 @@ void placeTileOnCanvas( tcCanvas_t *canvas, tcTile_t *tile, int x_pos, int y_pos
     }
 }
 
+int indexifier( int x, int y, int width )
+{
+    return y * width + x;
+}
+
 void drawCanvas( tcGameData_t gameData )
 {
     tcCanvas_t *canvas = gameData.canvas;
     tcTile_t *tile;
     uint8_t tile_nr;
 
+    int map_x = 0;
+    int map_y = 0;
+    int tile_size = 2;
+    int draw_width = gameData.canvas->width / tile_size;
+    int draw_height = gameData.canvas->height / tile_size;
+
+    for ( int x = 0; x < draw_width; x++ )
+        for ( int y = 0; y < draw_height; y++ )
+        {
+            tile_nr = gameData.map->tiles[indexifier(x + map_x, y + map_y, gameData.map->width)].base_content - 1;
+            tile = gameData.store->usableTiles[tile_nr]->tiles[0];
+            placeTileOnCanvas( canvas, tile, x * 2, y * 2 );
+        }
+
+    /*
     for ( int x = 0; x < canvas->width; x+=2 )
     {
         for ( int y = 0; y < canvas->height; y+=2 )
@@ -130,7 +148,9 @@ void drawCanvas( tcGameData_t gameData )
             placeTileOnCanvas( canvas, tile, x, y );       
         }
     }
+    */
 }
+
 
 void renderCanvas( tcGameData_t gameData )
 {
